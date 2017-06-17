@@ -1,0 +1,28 @@
+[project]
+title = RPG test
+version = 0.1
+dependencies = 
+
+[bootstrap]
+main_collection = /main/main.collectionc
+render = /main/render/untitled.renderc
+
+[input]
+game_binding = /input/game.input_bindingc
+
+[display]
+width = 640
+height = 640
+high_dpi = 0
+fullscreen = 0
+
+[physics]
+scale = 0.02
+
+[script]
+shared_state = 1
+
+[graphics]
+default_texture_min_filter = nearest
+default_texture_mag_filter = nearest
+

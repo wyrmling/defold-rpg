@@ -1,0 +1,121 @@
+animations {
+  id: "mage"
+  images {
+    image: "/main/img/mage/0.png"
+  }
+  images {
+    image: "/main/img/mage/1.png"
+  }
+  images {
+    image: "/main/img/mage/10.png"
+  }
+  images {
+    image: "/main/img/mage/11.png"
+  }
+  images {
+    image: "/main/img/mage/12.png"
+  }
+  images {
+    image: "/main/img/mage/13.png"
+  }
+  images {
+    image: "/main/img/mage/14.png"
+  }
+  images {
+    image: "/main/img/mage/15.png"
+  }
+  images {
+    image: "/main/img/mage/16.png"
+  }
+  images {
+    image: "/main/img/mage/17.png"
+  }
+  images {
+    image: "/main/img/mage/18.png"
+  }
+  images {
+    image: "/main/img/mage/19.png"
+  }
+  images {
+    image: "/main/img/mage/2.png"
+  }
+  images {
+    image: "/main/img/mage/20.png"
+  }
+  images {
+    image: "/main/img/mage/21.png"
+  }
+  images {
+    image: "/main/img/mage/22.png"
+  }
+  images {
+    image: "/main/img/mage/23.png"
+  }
+  images {
+    image: "/main/img/mage/24.png"
+  }
+  images {
+    image: "/main/img/mage/25.png"
+  }
+  images {
+    image: "/main/img/mage/26.png"
+  }
+  images {
+    image: "/main/img/mage/27.png"
+  }
+  images {
+    image: "/main/img/mage/28.png"
+  }
+  images {
+    image: "/main/img/mage/29.png"
+  }
+  images {
+    image: "/main/img/mage/3.png"
+  }
+  images {
+    image: "/main/img/mage/30.png"
+  }
+  images {
+    image: "/main/img/mage/31.png"
+  }
+  images {
+    image: "/main/img/mage/32.png"
+  }
+  images {
+    image: "/main/img/mage/33.png"
+  }
+  images {
+    image: "/main/img/mage/34.png"
+  }
+  images {
+    image: "/main/img/mage/35.png"
+  }
+  images {
+    image: "/main/img/mage/36.png"
+  }
+  images {
+    image: "/main/img/mage/4.png"
+  }
+  images {
+    image: "/main/img/mage/5.png"
+  }
+  images {
+    image: "/main/img/mage/6.png"
+  }
+  images {
+    image: "/main/img/mage/7.png"
+  }
+  images {
+    image: "/main/img/mage/8.png"
+  }
+  images {
+    image: "/main/img/mage/9.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 5
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+margin: 0
+extrude_borders: 0
+inner_padding: 0
