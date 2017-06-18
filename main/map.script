@@ -4,11 +4,11 @@ go.property("turn", 0)
 
 function init(self)
 	defos.disable_window_resize()
-	
-	msg.post('#calm_theme', 'play_sound', {gain = 0.1})
-	
 
-	
+	msg.post('#calm_theme', 'play_sound', {gain = 0.1})
+
+
+
 	--255, 215, 0
 end
 
@@ -19,7 +19,7 @@ end
 function update(self, dt)
 	-- тут должен быть цикл из объектов и их ходов
 	-- вместо этого пока что хардкод
-	
+
 	--particlefx.play('particle_test#particlefx')
 end
 
