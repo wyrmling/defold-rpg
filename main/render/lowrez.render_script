@@ -13,32 +13,20 @@ function init(self)
     self.view = vmath.matrix4()
 end
 
+local RESOLUTION = 320
+
 function update(self)
     render.set_depth_mask(true)
     render.clear({ [render.BUFFER_COLOR_BIT] = self.clear_color, [render.BUFFER_DEPTH_BIT] = 1, [render.BUFFER_STENCIL_BIT] = 0 })
 
-    local virtual_width = 320
-    local virtual_height = 320
-    local virtual_ratio = math.max(virtual_height, 1.0) / math.max(virtual_width, 1.0)
-    local virtual_ratio2 = math.max(virtual_width, 1.0) / math.max(virtual_height, 1.0)
+    local w = render.get_window_width()
+    local h = render.get_window_height()
+    local min_size = math.min(w, h)
+    local max_size = math.max(w, h)
+    local offset = (max_size - min_size) / 2
 
-    local actual_ratio = math.max(render.get_window_height(), 1.0) / math.max(render.get_window_width(), 1.0)
-
-    local size = math.min(render.get_window_width(), render.get_window_height())
-
-
-    if actual_ratio > virtual_ratio then
-        local y_center = ((render.get_window_height() - (size * virtual_ratio)) / 2)
-        render.set_viewport(0, y_center, size, size * virtual_ratio)
-        render.set_view(self.view)
-    elseif actual_ratio < virtual_ratio then
-        local x_center = ((render.get_window_width() - (size * virtual_ratio2)) / 2)
-        render.set_viewport(x_center, 0, size * virtual_ratio2, size)
-        render.set_view(self.view)
-    elseif actual_ratio == virtual_ratio then
-        render.set_viewport(0, 0, size * virtual_ratio2, size)
-        render.set_view(self.view)
-    end
+    render.set_viewport(w > h and offset or 0, w < h and offset or 0, min_size, min_size)
+    render.set_view(self.view)
 
     render.set_depth_mask(false)
     render.disable_state(render.STATE_DEPTH_TEST)
@@ -47,16 +35,18 @@ function update(self)
     render.set_blend_func(render.BLEND_SRC_ALPHA, render.BLEND_ONE_MINUS_SRC_ALPHA)
     render.disable_state(render.STATE_CULL_FACE)
 
-    render.set_projection(vmath.matrix4_orthographic(-virtual_width / 2, virtual_width / 2, -virtual_width / 2, virtual_height / 2, -1, 1))
+    -- default set_projection
+    --render.set_projection(vmath.matrix4_orthographic(0, RESOLUTION, 0, RESOLUTION, -1, 1))
+
+    -- camera centered
+    render.set_projection(vmath.matrix4_orthographic(-RESOLUTION / 2, RESOLUTION / 2, -RESOLUTION / 2, RESOLUTION / 2, -1, 1))
 
     render.draw(self.tile_pred)
     render.draw(self.particle_pred)
     render.draw_debug3d()
 
     render.set_view(vmath.matrix4())
-    render.set_projection(vmath.matrix4_orthographic(0, virtual_width, 0, virtual_height, -1, 1))
-
-
+    render.set_projection(vmath.matrix4_orthographic(0, RESOLUTION, 0, RESOLUTION, -1, 1))
 
     render.enable_state(render.STATE_STENCIL_TEST)
     render.draw(self.gui_pred)
