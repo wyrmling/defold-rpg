@@ -339,7 +339,7 @@ embedded_instances {
   id: "particle_test"
   data: "components {\n"
   "  id: \"particlefx\"\n"
-  "  component: \"/main/untitled.particlefx\"\n"
+  "  component: \"/main/particles/item_shine.particlefx\"\n"
   "  position {\n"
   "    x: 0.0\n"
   "    y: 0.0\n"
@@ -354,9 +354,9 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: -16.377
-    y: 110.592
-    z: 0.15
+    x: 81.246
+    y: 85.59
+    z: 0.65
   }
   rotation {
     x: 0.0

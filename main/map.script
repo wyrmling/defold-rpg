@@ -6,23 +6,26 @@ function init(self)
 	defos.disable_window_resize()
 	
 	msg.post('#calm_theme', 'play_sound', {gain = 0.1})
+	
+
+	
+	--255, 215, 0
 end
 
 function final(self)
-	-- Add finalization code here
-	-- Remove this function if not needed
+
 end
 
 function update(self, dt)
-	-- Add update code here
-	-- Remove this function if not needed
+	-- тут должен быть цикл из объектов и их ходов
+	-- вместо этого пока что хардкод
+	
+	--particlefx.play('particle_test#particlefx')
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("next_turn") then
-        self.turn = self.turn + 1
-        label.set_text("#label_turn", self.turn)
-        go.set("#label_turn", "color", vmath.vector4(0, 0.2, 0.5, 1))
+	if message_id == hash("take_turn") then
+        msg.post('/enemy#script', 'take_turn')
     end
 end
 
@@ -34,4 +37,10 @@ end
 function on_reload(self)
 	-- Add reload-handling code here
 	-- Remove this function if not needed
+end
+
+function next_turn()
+	self.turn = self.turn + 1
+    label.set_text("#label_turn", self.turn)
+    go.set("#label_turn", "color", vmath.vector4(0, 0.2, 0.5, 1))
 end

@@ -15,6 +15,11 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
+	if message_id == hash('take_turn') then
+		if check_in_range(1, go.get_position('/player')) then
+			attack_player()
+		end
+	end
 	-- Add message-handling code here
 	-- Remove this function if not needed
 end
@@ -27,4 +32,9 @@ end
 function on_reload(self)
 	-- Add reload-handling code here
 	-- Remove this function if not needed
+end
+
+function check_in_range(distance, object_coord)
+	print(go.get_position())
+	return false
 end

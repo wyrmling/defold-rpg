@@ -64,7 +64,7 @@ function on_input(self, action_id, action)
     end
     
     if action.pressed then
-    	msg.post('level#map', 'next_turn')
+    	msg.post('level#map', 'take_turn')
 	end
     --local t = tilemap.get_tile('level#tilemap', 'walls', self.player_x, self.player_y)
     --print(t)
@@ -79,7 +79,7 @@ function passable(direction)
 	local pos = go.get_position()
 	local x = pos.x/16 + 1
 	local y = pos.y/16 + 1
-	print(x, y)
+	--print(x, y)
 	if direction == 'left' and tilemap.get_tile('level#tilemap', 'walls', x-1, y) == 0 then
 		return true
 	elseif direction == 'right' and tilemap.get_tile('level#tilemap', 'walls', x+1, y) == 0 then

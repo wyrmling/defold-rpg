@@ -13,11 +13,7 @@ game_binding = /input/game.input_bindingc
 [display]
 width = 640
 height = 640
-high_dpi = 0
 fullscreen = 0
-
-[physics]
-scale = 0.02
 
 [script]
 shared_state = 1
