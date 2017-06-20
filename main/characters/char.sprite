@@ -1,0 +1,4 @@
+tile_set: "/main/characters/char.tilesource"
+default_animation: "player"
+material: "/builtins/materials/sprite.material"
+blend_mode: BLEND_MODE_ALPHA

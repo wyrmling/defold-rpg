@@ -1,6 +1,9 @@
 images {
   image: "/builtins/graphics/particle_blob.png"
 }
+images {
+  image: "/main/img/mage/0.png"
+}
 margin: 0
 extrude_borders: 0
 inner_padding: 0

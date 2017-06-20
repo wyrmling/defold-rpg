@@ -1,3 +1,9 @@
+local range = require("utils.range")
+local dbg = require("utils.dbg")
+--require("utils.debug")
+
+go.property("health", 5)
+
 function init(self)
 	-- Add initialization code here
 	-- Remove this function if not needed
@@ -16,8 +22,11 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash('take_turn') then
-		if check_in_range(1, go.get_position('/player')) then
-			attack_player()
+		if go.check_in_range_square(0, go.get_position('/player')) then
+			print('player close')
+			--dbg.log(go.get_position('/player'))
+			msg.post('/player#player', 'damage', {damage = 1})
+			--attack_player()
 		end
 	end
 	-- Add message-handling code here
@@ -34,7 +43,4 @@ function on_reload(self)
 	-- Remove this function if not needed
 end
 
-function check_in_range(distance, object_coord)
-	--print(go.get_position())
-	return false
-end
+

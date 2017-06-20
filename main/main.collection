@@ -152,13 +152,27 @@ embedded_instances {
 }
 embedded_instances {
   id: "player"
-  children: "gui"
   data: "components {\n"
   "  id: \"player\"\n"
   "  component: \"/main/player.script\"\n"
   "  position {\n"
   "    x: 0.0\n"
   "    y: 0.0\n"
+  "    z: 0.0\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "}\n"
+  "components {\n"
+  "  id: \"sprite\"\n"
+  "  component: \"/main/characters/char.sprite\"\n"
+  "  position {\n"
+  "    x: 8.0\n"
+  "    y: 8.0\n"
   "    z: 0.0\n"
   "  }\n"
   "  rotation {\n"
@@ -213,26 +227,6 @@ embedded_instances {
   "  position {\n"
   "    x: 8.0\n"
   "    y: 25.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
-  "}\n"
-  "embedded_components {\n"
-  "  id: \"sprite\"\n"
-  "  type: \"sprite\"\n"
-  "  data: \"tile_set: \\\"/main/characters/char.tilesource\\\"\\n"
-  "default_animation: \\\"char\\\"\\n"
-  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "blend_mode: BLEND_MODE_ALPHA\\n"
-  "\"\n"
-  "  position {\n"
-  "    x: 8.0\n"
-  "    y: 8.0\n"
   "    z: 0.0\n"
   "  }\n"
   "  rotation {\n"
@@ -318,27 +312,6 @@ embedded_instances {
   "    w: 1.0\n"
   "  }\n"
   "}\n"
-  "embedded_components {\n"
-  "  id: \"camera\"\n"
-  "  type: \"camera\"\n"
-  "  data: \"aspect_ratio: 1.0\\n"
-  "fov: 45.0\\n"
-  "near_z: 0.1\\n"
-  "far_z: 1000.0\\n"
-  "auto_aspect_ratio: 0\\n"
-  "\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
-  "}\n"
   ""
   position {
     x: 141.869
@@ -376,7 +349,7 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 81.246
+    x: 88.368
     y: 85.59
     z: 0.65
   }
@@ -413,7 +386,7 @@ embedded_instances {
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
   "  data: \"tile_set: \\\"/main/characters/char.tilesource\\\"\\n"
-  "default_animation: \\\"enemy\\\"\\n"
+  "default_animation: \\\"pixie\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
@@ -431,44 +404,9 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 6.895
-    y: 148.575
+    x: 24.0
+    y: 88.0
     z: 0.15
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-embedded_instances {
-  id: "gui"
-  data: "components {\n"
-  "  id: \"gui\"\n"
-  "  component: \"/main/game.gui\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
-  "}\n"
-  ""
-  position {
-    x: -146.924
-    y: 31.484
-    z: 0.0
   }
   rotation {
     x: 0.0
@@ -525,6 +463,76 @@ embedded_instances {
     x: 0.0
     y: 0.0
     z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+embedded_instances {
+  id: "gui"
+  data: "components {\n"
+  "  id: \"gui\"\n"
+  "  component: \"/main/game.gui\"\n"
+  "  position {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "}\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.7
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+embedded_instances {
+  id: "particle_test2"
+  data: "components {\n"
+  "  id: \"particlefx1\"\n"
+  "  component: \"/main/particles/pixed_perfect_test.particlefx\"\n"
+  "  position {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "}\n"
+  ""
+  position {
+    x: 108.127
+    y: 61.282
+    z: 0.65
   }
   rotation {
     x: 0.0

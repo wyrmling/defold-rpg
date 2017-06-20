@@ -1,11 +1,13 @@
 local defos = require("utils.defos")
 
+T_SIZE = 16
+
 go.property("turn", 0)
 
 function init(self)
 	defos.disable_window_resize()
 
-	msg.post('#calm_theme', 'play_sound', {gain = 0.1})
+	--msg.post('#calm_theme', 'play_sound', {gain = 0.1})
 
 
 
@@ -20,12 +22,14 @@ function update(self, dt)
 	-- тут должен быть цикл из объектов и их ходов
 	-- вместо этого пока что хардкод
 
-	--particlefx.play('particle_test#particlefx')
+	--particlefx.play('/particle_test#particlefx')
+	--particlefx.play('/particle_test2#particlefx1')
 end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("take_turn") then
         msg.post('/enemy#script', 'take_turn')
+        msg.post('/enemy2#script', 'take_turn')
     end
 end
 
