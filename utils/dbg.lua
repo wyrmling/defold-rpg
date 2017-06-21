@@ -27,7 +27,20 @@ function D.log(data)
     elseif type(data) == 'table' then
     	local tab_vals = {}
 		for key, val in pairs(data) do
-			table.insert(tab_vals, key .. val)
+            if type(key) == 'table' then
+                print('lol')
+            end
+
+            if type(val) == 'table' then
+                local d_log = D.log(val)
+                if type(d_log) ~= 'nil' then
+                    table.insert(tab_vals, key .. d_log)
+                end
+            elseif type(val) == 'nil' then
+
+            else
+                table.insert(tab_vals, key .. val)
+            end
         end
         
         print(table.concat(tab_vals, ","))

@@ -1808,5 +1808,5 @@ layers {
     v_flip: 0
   }
 }
-material: "/main/tile_map.material"
+material: "/main/materials/tile_map.material"
 blend_mode: BLEND_MODE_ALPHA

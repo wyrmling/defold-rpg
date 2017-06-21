@@ -1,8 +1,15 @@
 local range = require("utils.range")
 local dbg = require("utils.dbg")
+local inspect = require("utils.inspect")
 
-go.property("health", 10)
-go.property("pass_map", {})
+local moves = {
+    move_left = { x = -1, y = 0 },
+    move_right = { x = 1, y = 0 },
+    move_up = { x = 0, y = 1 },
+    move_down = { x = 0, y = -1 },
+}
+
+go.property('health', 10)
 
 function init(self)
     --self.health = 123
@@ -50,35 +57,18 @@ end
 
 function on_input(self, action_id, action)
 
+    local pass_map = build_pass_map(self)
 
-    print(hash("move_left"))
-    
-    build_pass_map(self)
-    
-    dbg.log(self.pass_map)
+    --dbg.log(pass_map)
+--    print(inspect(pass_map))
+	local direction = get_direction(action_id)
+--    print(direction)
 
-    if action.pressed and passable(action_id) then
-
-        if action_id == hash('move_left') then
-            local pos = go.get_position()
-            pos.x = pos.x - T_SIZE
-            go.set_position(pos)
-            --print(go.get_position('/player'), go.get_position())
-            --msg.post("/enemy#camera", "acquire_camera_focus")
-        elseif action_id == hash('move_right') then
-            local pos = go.get_position()
-            pos.x = pos.x + T_SIZE
-            go.set_position(pos)
-        elseif action_id == hash('move_up') then
-            local pos = go.get_position()
-            pos.y = pos.y + T_SIZE
-            go.set_position(pos)
-        elseif action_id == hash('move_down') then
-            local pos = go.get_position()
-            pos.y = pos.y - T_SIZE
-            go.set_position(pos)
-        end
-
+    if action.pressed and passable(direction) then
+        local pos = go.get_position()
+        pos.x = pos.x + T_SIZE * moves[direction].x
+        pos.y = pos.y + T_SIZE * moves[direction].y
+        go.set_position(pos)
     end
 
     if action.pressed then
@@ -93,28 +83,36 @@ function on_input(self, action_id, action)
     --msg.post("/level#tilemap", "set_tile", { layer_id = hash("floor"), position = doorpos, tile = 46, dy = 1 })
 end
 
+function on_reload(self)
+    -- Add reload-handling code here
+    -- Remove this function if not needed
+end
+
 function passable(direction)
     local pos = go.get_tile_pos()
 
-    if direction == hash('move_left') and tilemap.get_tile('level#tilemap', 'walls', pos.x-1, pos.y) == 0 then
-        return true
-    elseif direction == hash('move_right') and tilemap.get_tile('level#tilemap', 'walls', pos.x+1, pos.y) == 0 then
-        return true
-    elseif direction == hash('move_up') and tilemap.get_tile('level#tilemap', 'walls', pos.x, pos.y+1) == 0 then
-        return true
-    elseif direction == hash('move_down') and tilemap.get_tile('level#tilemap', 'walls', pos.x, pos.y-1) == 0 then
+	if tilemap.get_tile('level#tilemap', 'walls', pos.x + moves[direction].x, pos.y + moves[direction].y) == 0 then
         return true
     else
         return false
     end
 end
 
-function on_reload(self)
-    -- Add reload-handling code here
-    -- Remove this function if not needed
+function get_direction(action_id)
+    if action_id == hash('move_left') then
+        return 'move_left'
+    elseif action_id == hash('move_right') then
+        return 'move_right'
+    elseif action_id == hash('move_up') then
+        return 'move_up'
+    elseif action_id == hash('move_down') then
+        return 'move_down'
+    else
+        return false
+    end
 end
 
-function build_pass_map(self)
+function build_pass_map()
 	local pass_map2 = {{x=1,y=1}, {x=2,y=2}}
-	self.pass_map = pass_map2
+	return pass_map2
 end

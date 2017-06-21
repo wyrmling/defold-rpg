@@ -3,6 +3,7 @@ local dbg = require("utils.dbg")
 --require("utils.debug")
 
 go.property("health", 5)
+go.property("hostile", true)
 
 function init(self)
 	-- Add initialization code here
