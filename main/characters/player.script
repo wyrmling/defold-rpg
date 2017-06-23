@@ -13,7 +13,7 @@ go.property('health', 10)
 
 function init(self)
     --self.health = 123
-
+	send_obj_pos()
     msg.post(".", "acquire_input_focus")
 end
 
@@ -64,11 +64,25 @@ function on_input(self, action_id, action)
 	local direction = get_direction(action_id)
 --    print(direction)
 
-    if action.pressed and passable(direction) then
-        local pos = go.get_position()
-        pos.x = pos.x + T_SIZE * moves[direction].x
-        pos.y = pos.y + T_SIZE * moves[direction].y
-        go.set_position(pos)
+	if message_id == hash('take_turn') then
+		print('player take turn')	
+	end
+
+    if action.pressed then
+
+		local object_at_direction = get_object_at_direction(direction)
+
+		if (object_at_direction.type == 'enemy') then
+			--print('damage from player')
+			--msg.post(object_at_direction.receiver, 'damage', {damage = 2})
+		else
+			if passable(direction) then
+				local pos = go.get_position()
+				pos.x = pos.x + T_SIZE * moves[direction].x
+				pos.y = pos.y + T_SIZE * moves[direction].y
+				go.set_position(pos)
+			end
+		end
     end
 
     if action.pressed then
@@ -86,6 +100,17 @@ end
 function on_reload(self)
     -- Add reload-handling code here
     -- Remove this function if not needed
+end
+
+--todo: отделить объекты от тайлов, проверять отдельно, тайлмеп есть - надо сделать карту объектов
+
+function get_object_at_direction(direction)
+	--pprint(direction)
+	if go.check_in_range_square(0, go.get_position()) then
+		return {type = 'enemy', receiver = 'enemy'}
+	else
+		return {type = 'tile', receiver = 'map'}
+	end
 end
 
 function passable(direction)
@@ -115,4 +140,9 @@ end
 function build_pass_map()
 	local pass_map2 = {{x=1,y=1}, {x=2,y=2}}
 	return pass_map2
+end
+
+function send_obj_pos()
+	local pos = go.get_position()
+	msg.post('/level#map', 'obj_pos', {x = pos.x, y = pos.y})
 end

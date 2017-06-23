@@ -1,4 +1,13 @@
 local defos = require("utils.defos")
+local inspect = require("utils.inspect")
+
+local obj_pos = {}
+local battle_order = {}
+--go.property('battle_order_active', hash('/player#player'))
+go.property('battle_order_active', msg.url('/player#player'))
+
+--local id = go.get_id()
+--go.set(id,'battle_order_active',0)
 
 T_SIZE = 16
 
@@ -7,11 +16,20 @@ go.property("turn", 0)
 function init(self)
 	defos.disable_window_resize()
 
+	--local p = go.get_position()
+	--p.y = vmath.lerp(math.random(), min_y, max_y)
+	--local component = "#star_factory"
+	table.insert(battle_order, {id = '/player#player', name = 'player', order = true})
+
+	--init battle order	
+	local enemy_id = factory.create('/enemies#factory', vmath.vector3(40,80,0))
+	table.insert(battle_order, {id = enemy_id, name = 'enemy', order = false})
+	--self.battle_order[enemy_id] = {name = 'enemy', order = false}
+	
+		
 	--msg.post('#calm_theme', 'play_sound', {gain = 0.1})
-
-
-
-	--255, 215, 0
+	
+	
 end
 
 function final(self)
@@ -27,9 +45,50 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
+	
+	if message_id == hash('get_battle_order') then
+		return self.battle_order
+	end
+	
+	if message_id == hash("obj_pos") then
+		obj_pos[sender] = message.x, message.y
+	end
+	--print(inspect(obj_pos))
+	--print('---')
+	--print(sender, message.x, message.y)
+	
 	if message_id == hash("take_turn") then
-        msg.post('/enemy#script', 'take_turn')
-        msg.post('/enemy2#script', 'take_turn')
+		--print(inspect(battle_order))
+		
+		--pprint(sender)
+		
+		for key, char in ipairs(battle_order) do
+			--pprint(char.id, self.battle_order_active)
+        	if char.id == self.battle_order_active then
+        		
+        		--battle_order[key].order = false
+        		if #battle_order == key then
+        		--	battle_order[1].order = true
+        			self.battle_order_active = battle_order[1].id
+        		else
+        		--	battle_order[key+1].order = true
+        			self.battle_order_active = battle_order[key+1].id
+        		end
+        	end
+        	--print(hash('/player#player'))
+        	--print(self.battle_order_active)
+        	--self.battle_order_active = battle_order[2].id
+        	--print(go.get('/player#player','health'))
+        	
+        end
+        --pprint(self.battle_order_active)
+        --pprint(hash('/player#player'))
+        --print(go.get(self.battle_order_active,'health'))
+        print(go.get(msg.url('player#player'),'health'))
+        --print(go.get('/player#player','health'))
+        --pprint(go.get(hash('/player#player'),'health'))
+        msg.post(self.battle_order_active, 'take_turn')
+        --pprint(self.battle_order_active)
     end
 end
 
@@ -47,4 +106,12 @@ function next_turn()
 	self.turn = self.turn + 1
     label.set_text("#label_turn", self.turn)
     go.set("#label_turn", "color", vmath.vector4(0, 0.2, 0.5, 1))
+end
+
+function init_battle_order()
+	
+end
+
+function get_battle_order()
+	return self.battle_order	
 end

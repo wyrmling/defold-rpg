@@ -6,8 +6,8 @@ go.property("health", 5)
 go.property("hostile", true)
 
 function init(self)
-	-- Add initialization code here
-	-- Remove this function if not needed
+	-- добавить в карту объектов	
+	send_obj_pos()
 end
 
 function final(self)
@@ -23,12 +23,15 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash('take_turn') then
-		if go.check_in_range_square(0, go.get_position('/player')) then
+		
+		if go.check_in_range_square(0, go.get_position('/player')) and self.hostile then
 			print('player close')
 			--dbg.log(go.get_position('/player'))
-			msg.post('/player#player', 'damage', {damage = 1})
+			--msg.post(hash('/player#player'), 'damage', {damage = 1})
 			--attack_player()
 		end
+		
+		next_turn()
 	end
 	-- Add message-handling code here
 	-- Remove this function if not needed
@@ -44,4 +47,7 @@ function on_reload(self)
 	-- Remove this function if not needed
 end
 
-
+function next_turn()
+	send_obj_pos()
+	msg.post('level#map', 'take_turn')
+end
