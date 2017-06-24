@@ -3,6 +3,10 @@ fonts {
   name: "system_font"
   font: "/builtins/fonts/system_font.font"
 }
+fonts {
+  name: "pixel_font"
+  font: "/main/pixel_font.font"
+}
 textures {
   name: "gui"
   texture: "/main/gui.atlas"
@@ -156,7 +160,7 @@ nodes {
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
   text: "<turn>"
-  font: "system_font"
+  font: "pixel_font"
   id: "text"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE

@@ -1,21 +1,6 @@
 components {
   id: "script"
-  component: "/main/characters/enemy.script"
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-}
-components {
-  id: "msg_label_factory"
-  component: "/main/label.factory"
+  component: "/main/label.script"
   position {
     x: 0.0
     y: 0.0
@@ -29,27 +14,7 @@ components {
   }
 }
 embedded_components {
-  id: "sprite"
-  type: "sprite"
-  data: "tile_set: \"/main/characters/char.tilesource\"\n"
-  "default_animation: \"pixie\"\n"
-  "material: \"/builtins/materials/sprite.material\"\n"
-  "blend_mode: BLEND_MODE_ALPHA\n"
-  ""
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-}
-embedded_components {
-  id: "hp_label"
+  id: "label"
   type: "label"
   data: "size {\n"
   "  x: 128.0\n"
@@ -86,13 +51,13 @@ embedded_components {
   "pivot: PIVOT_CENTER\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
   "line_break: false\n"
-  "text: \"HP\"\n"
+  "text: \"<>\"\n"
   "font: \"/main/pixel_font.font\"\n"
   "material: \"/main/materials/label_pixel.material\"\n"
   ""
   position {
     x: 0.0
-    y: 12.94
+    y: 0.0
     z: 0.0
   }
   rotation {

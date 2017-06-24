@@ -24,6 +24,13 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == hash('take_turn') then
 		
+		--scroll_msg('turn taken')
+		
+		--msg.post('#msg_label_factory', 'new_line', {'turn taken'})
+		
+		--msg.post(msg_label, 'new_line', {msg = 'turn taken'})
+		--label.set_text(msg_label, 'turn taken')
+		
 		if go.check_in_range_square(0, go.get_position('/player')) and self.hostile then
 			print('player close')
 			--dbg.log(go.get_position('/player'))
@@ -47,7 +54,6 @@ function on_reload(self)
 	-- Remove this function if not needed
 end
 
-function next_turn()
-	send_obj_pos()
-	msg.post('level#map', 'take_turn')
-end
+
+
+

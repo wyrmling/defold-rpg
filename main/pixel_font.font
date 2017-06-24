@@ -1,0 +1,4 @@
+font: "/builtins/fonts/vera_mo_bd.ttf"
+material: "/main/materials/font_pixel.material"
+size: 11
+antialias: 0

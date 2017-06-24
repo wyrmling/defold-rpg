@@ -10,6 +10,7 @@ local moves = {
 }
 
 go.property('health', 10)
+go.property('is_turn', true)
 
 function init(self)
     --self.health = 123
@@ -23,16 +24,16 @@ function final(self)
 end
 
 function update(self, dt)
-    local labelC = {go.get('#label', 'color'), '<-color'}
+    --local labelC = {go.get('#label', 'color'), '<-color'}
     --print(labelC[1], labelC[2])
 
     msg.post("#camera", "acquire_camera_focus")
     --msg.post("/enemy#camera", "acquire_camera_focus")
     --msg.post("/gui#camera", "acquire_camera_focus")
 
-    label.set_text("#label", self.health)
-    local grey = vmath.vector4(1, 0, 0, 1.0)
-    go.set("player#label", "color", grey)
+    label.set_text("#label", 'HP ' .. self.health)
+    local red = vmath.vector4(1, 0, 0, 1.0)
+    go.set("player#label", "color", red)
     --go.set("#label", "outline.w", 0)
     --go.set("#label", "scale.x", scale_x * 2)
     --print(tilemap.get_tile("/level#tilemap", "walls", 2, 4))
@@ -53,6 +54,10 @@ function on_message(self, message_id, message, sender)
             go.delete()
         end
     end
+    
+    if message_id == hash('take_turn') then
+    	self.is_turn = true
+	end
 end
 
 function on_input(self, action_id, action)
@@ -60,17 +65,19 @@ function on_input(self, action_id, action)
     local pass_map = build_pass_map(self)
 
     --dbg.log(pass_map)
---    print(inspect(pass_map))
+    --print(inspect(pass_map))
+    
 	local direction = get_direction(action_id)
---    print(direction)
+    --print(direction)
+    
+    --print(self.is_turn)
 
-	if message_id == hash('take_turn') then
-		print('player take turn')	
-	end
-
-    if action.pressed then
+    if action.pressed and self.is_turn then
+		--print('player take turn')
 
 		local object_at_direction = get_object_at_direction(direction)
+		
+		--pprint(object_at_direction)
 
 		if (object_at_direction.type == 'enemy') then
 			--print('damage from player')
@@ -86,7 +93,10 @@ function on_input(self, action_id, action)
     end
 
     if action.pressed then
-        msg.post('level#map', 'take_turn')
+    	self.is_turn = false
+    	--print('player sending turn to map')
+        --msg.post('level#map', 'take_turn')
+        next_turn()
     end
     --local t = tilemap.get_tile('level#tilemap', 'walls', self.player_x, self.player_y)
     --print(t)
@@ -140,9 +150,4 @@ end
 function build_pass_map()
 	local pass_map2 = {{x=1,y=1}, {x=2,y=2}}
 	return pass_map2
-end
-
-function send_obj_pos()
-	local pos = go.get_position()
-	msg.post('/level#map', 'obj_pos', {x = pos.x, y = pos.y})
 end

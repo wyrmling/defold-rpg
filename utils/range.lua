@@ -5,7 +5,7 @@
 
 local dbg = require("utils.dbg")
 
-if _G.go then print('test') end
+--if _G.go then print('test') end
 
 -- [[distance starting from 0.. - it's adjacent block]]
 function go.check_in_range_square(distance, object_coord)

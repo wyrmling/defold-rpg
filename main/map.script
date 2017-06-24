@@ -19,7 +19,8 @@ function init(self)
 	--local p = go.get_position()
 	--p.y = vmath.lerp(math.random(), min_y, max_y)
 	--local component = "#star_factory"
-	table.insert(battle_order, {id = '/player#player', name = 'player', order = true})
+	--table.insert(battle_order, {id = msg.url('/player#player'), name = 'player', order = true})
+	table.insert(battle_order, {id = msg.url('/player#player'), name = 'player', order = true})
 
 	--init battle order	
 	local enemy_id = factory.create('/enemies#factory', vmath.vector3(40,80,0))
@@ -62,17 +63,24 @@ function on_message(self, message_id, message, sender)
 		
 		--pprint(sender)
 		
+		--scroll_msg('turn taken', sender)
+		
+		--print(self.battle_order_active)
+		
 		for key, char in ipairs(battle_order) do
 			--pprint(char.id, self.battle_order_active)
+			--print(char.id, self.battle_order_active)
         	if char.id == self.battle_order_active then
-        		
+        		--print(#battle_order, key)
         		--battle_order[key].order = false
         		if #battle_order == key then
         		--	battle_order[1].order = true
         			self.battle_order_active = battle_order[1].id
+        			break
         		else
         		--	battle_order[key+1].order = true
         			self.battle_order_active = battle_order[key+1].id
+        			break
         		end
         	end
         	--print(hash('/player#player'))
@@ -81,12 +89,19 @@ function on_message(self, message_id, message, sender)
         	--print(go.get('/player#player','health'))
         	
         end
-        --pprint(self.battle_order_active)
+        
+        --pprint(battle_order)
+        --print(self.battle_order_active)
+		
         --pprint(hash('/player#player'))
         --print(go.get(self.battle_order_active,'health'))
-        print(go.get(msg.url('player#player'),'health'))
+        --print(go.get(msg.url('player#player'),'health'))
+        
         --print(go.get('/player#player','health'))
         --pprint(go.get(hash('/player#player'),'health'))
+        
+		--scroll_msg('turn sent', self.battle_order_active)
+        
         msg.post(self.battle_order_active, 'take_turn')
         --pprint(self.battle_order_active)
     end
@@ -114,4 +129,36 @@ end
 
 function get_battle_order()
 	return self.battle_order	
+end
+
+function scroll_msg(text_message, url)
+	--print(url, go.get_id(), msg.url())
+	--print(text_message .. ' by ' .. url)
+	--pprint(url)
+	--print(go.get_id(url))
+	--msg.url()
+	--go.ge
+	--local msg_label = factory.create('#msg_label_factory', nil, nil, {temp = true})
+	--print(msg_label)
+	--msg.post(msg_label, 'scrolling_line', {text = text_message})
+end
+
+function send_obj_pos()
+	local pos = go.get_position()
+	msg.post('/level#map', 'obj_pos', {x = pos.x, y = pos.y})
+end
+
+function next_turn()
+	send_obj_pos()
+	--print('turn sent by ' .. msg.url())
+	--label.set_text("#msg_label_factory", 'turn sent')
+	scroll_msg('turn sent')
+	msg.post('level#map', 'take_turn')
+end
+
+function scroll_msg(text_message)
+	--print(msg.url('#msg_label_factory'), msg.url())
+	--print(go.get_id('#msg_label_factory'))
+	local msg_label = factory.create('#msg_label_factory', nil, nil, {temp = true})
+	msg.post(msg_label, 'scrolling_line', {text = text_message})
 end
