@@ -2,6 +2,7 @@ local range = require("utils.range")
 local dbg = require("utils.dbg")
 local inspect = require("utils.inspect")
 local tools = require("utils.tools")
+local dd = require("main.scripts.dd5.dd5")
 
 local moves = {
     move_left = { x = -1, y = 0 },
@@ -10,10 +11,29 @@ local moves = {
     move_down = { x = 0, y = -1 },
 }
 
-go.property('health', 10)
 go.property('is_turn', true)
 
+go.property('str', 17)
+go.property('dex', 11)
+go.property('con', 0)
+go.property('int', 0)
+go.property('wis', 0)
+go.property('cha', 0)
+
+--go.property('class', hash('fighter'))
+
+go.property('level', 1)
+
+go.property('hp', 10)
+go.property('ac', 0)
+
 function init(self)
+	self.class = 'fighter'
+	
+	
+	
+	
+	
     self.enemies = {}
     
 	--send_obj_pos()
@@ -29,13 +49,14 @@ function update(self, dt)
     --local labelC = {go.get('#label', 'color'), '<-color'}
     --print(labelC[1], labelC[2])
 
+
     msg.post("#camera", "acquire_camera_focus")
     --msg.post("/enemy#camera", "acquire_camera_focus")
     --msg.post("/gui#camera", "acquire_camera_focus")
 
-    label.set_text("#label", 'HP ' .. self.health)
+    label.set_text("#label_hp", 'HP ' .. self.hp)
     local red = vmath.vector4(1, 0, 0, 1.0)
-    go.set("player#label", "color", red)
+    go.set("#label_hp", "color", red)
     --go.set("#label", "outline.w", 0)
     --go.set("#label", "scale.x", scale_x * 2)
     --print(tilemap.get_tile("/level#tilemap", "walls", 2, 4))
@@ -51,8 +72,8 @@ end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("damage") then
-        self.health = self.health - message.damage
-        if self.health <= 0 then
+        self.hp = self.hp - message.damage
+        if self.hp <= 0 then
             go.delete()
         end
     end
@@ -77,18 +98,20 @@ function on_input(self, action_id, action)
     --dbg.log(pass_map)
     --print(inspect(pass_map))
     
+    
 	local direction = get_direction(action_id)
 
     if moves[direction] ~= nil and action.pressed and self.is_turn then
 		--print('player take turn')
+		
+		--local roll = dd.roll_create()
+		--pprint(roll)
 
 		local object_at_direction = get_object_at_direction(self, direction)
 		
-		--pprint(object_at_direction)
-
 		if (object_at_direction.type == 'enemy') then
-			--print(object_at_direction.id)
-			msg.post(object_at_direction.id, 'damage', {damage = 2})
+			msg.post(object_at_direction.id, 'damage', {damage = dd.roll('1d8') + dd.get_mod(self.str)})
+			msg.post('/sound#hit', 'play_sound', {gain = 0.1})
 		else
 			if passable(direction) then
 				local pos = go.get_position()
@@ -100,8 +123,8 @@ function on_input(self, action_id, action)
 	end
 
 	if action_id == hash('create_enemy') and action.pressed then
-		local rnd_x = math.random(2,5) * 16 + 8
-		local rnd_y = math.random(2,5) * 16 + 8
+		local rnd_x = math.random(2, 5) * 16 + 8
+		local rnd_y = math.random(2, 5) * 16 + 8
 		local enemy_id = factory.create('/enemies#factory', vmath.vector3(rnd_x, rnd_y, 0))
 		--table.insert(battle_order, {id = enemy_id, name = 'enemy', order = false})
 		table.insert(self.enemies, enemy_id)

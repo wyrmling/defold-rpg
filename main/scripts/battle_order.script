@@ -135,7 +135,7 @@ function next_turn()
 	--send_obj_pos()
 	--print('turn sent by ' .. msg.url())
 	--label.set_text("#msg_label_factory", 'turn sent')
-	scroll_msg('turn sent to map from ' .. msg.url())
+	--scroll_msg('turn sent to map from ' .. msg.url())
 	--print('turn sent to map from ' .. msg.url())
 	msg.post('/level#battle_order', 'take_turn')
 end

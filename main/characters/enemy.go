@@ -49,7 +49,7 @@ embedded_components {
   }
 }
 embedded_components {
-  id: "hp_label"
+  id: "label_hp"
   type: "label"
   data: "size {\n"
   "  x: 128.0\n"

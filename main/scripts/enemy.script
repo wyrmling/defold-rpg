@@ -1,13 +1,36 @@
 local range = require("utils.range")
 local dbg = require("utils.dbg")
+local dd = require("main.scripts.dd5.dd5")
 --require("utils.debug")
 
-go.property("health", 2)
-go.property("hostile", true)
+go.property('hostile', true)
+
+go.property('str', 0)
+go.property('dex', 0)
+go.property('con', 0)
+go.property('int', 0)
+go.property('wis', 0)
+go.property('cha', 0)
+
+--go.property('class', hash('fighter'))
+
+go.property('level', 1)
+
+go.property('hp', 0)
+go.property('ac', 0)
+
 
 function init(self)
-	-- добавить в карту объектов	
-	--send_obj_pos()
+	self.class = 'mage'
+	
+	self.str = dd.roll_create()
+	self.dex = dd.roll_create()
+	self.con = dd.roll_create()
+	self.int = dd.roll_create()
+	self.wis = dd.roll_create()
+	self.cha = dd.roll_create()
+	
+	self.hp = dd.get_max_hit_die(self) + dd.get_mod(self.con)
 end
 
 function final(self)
@@ -20,6 +43,10 @@ function update(self, dt)
 	--/main/player.script
 	--msg.post("default:/player#main", "damage", {damage = 1})
 	--msg.post("player#main", "damage", {damage = 1})
+	
+    label.set_text("#label_hp", self.hp)
+    local red = vmath.vector4(1, 0, 0, 1.0)
+    go.set("#label_hp", "color", red)
 end
 
 function on_message(self, message_id, message, sender)
@@ -40,7 +67,7 @@ function on_message(self, message_id, message, sender)
 		if go.check_in_range_square(0, go.get_position('/player')) and self.hostile then
 			print('player close')
 			--dbg.log(go.get_position('/player'))
-			--msg.post(hash('/player#main'), 'damage', {damage = 1})
+			msg.post('/player#main', 'damage', {damage = 1})
 			--attack_player()
 		end
 		
@@ -48,8 +75,9 @@ function on_message(self, message_id, message, sender)
 	end
 	
 	if message_id == hash("damage") then
-        self.health = self.health - message.damage
-        if self.health <= 0 then
+        self.hp = self.hp - message.damage
+        scroll_msg('-' .. message.damage)
+        if self.hp <= 0 then
             go.delete()
         end
     end
