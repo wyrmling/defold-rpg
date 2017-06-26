@@ -1,6 +1,6 @@
 components {
   id: "script"
-  component: "/main/label.script"
+  component: "/main/scripts/label.script"
   position {
     x: 0.0
     y: 0.0

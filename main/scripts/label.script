@@ -1,21 +1,19 @@
 go.property('temp', false)
 
 function init(self)
-	-- Add initialization code here
-	-- Remove this function if not needed
+	self.time = 0
 end
 
 function final(self)
-	-- Add finalization code here
-	-- Remove this function if not needed
 end
 
 function update(self, dt)
 	--go.set("#label", "outline.w", 0)
 	if self.temp then
 		local label_pos = go.get_position('#label')
+		self.time = self.time + dt
 		go.set_position(vmath.vector3(0, label_pos.y+1, 0), '#label')
-		if label_pos.y > 100 then
+		if self.time > 0.5 then
 			go.delete()
 		end
 	end
@@ -25,15 +23,16 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash('scrolling_line') then
 		--local msg = factory.create('#msg_label_factory', nil, nil, {temp = true})
 		label.set_text('#label', message.text)
+		go.set('#label', 'color', message.color)
+		--go.property('color',message.color)
+	end
+	if message_id == hash('test') then
+		print('таки да')
 	end
 end
 
 function on_input(self, action_id, action)
-	-- Add input-handling code here
-	-- Remove this function if not needed
 end
 
 function on_reload(self)
-	-- Add reload-handling code here
-	-- Remove this function if not needed
 end

@@ -30,3 +30,7 @@ key_trigger {
   input: KEY_D
   action: "move_right"
 }
+key_trigger {
+  input: KEY_T
+  action: "create_enemy"
+}

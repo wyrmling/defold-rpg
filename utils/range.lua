@@ -7,9 +7,12 @@ local dbg = require("utils.dbg")
 
 --if _G.go then print('test') end
 
--- [[distance starting from 0.. - it's adjacent block]]
+--[[
+	check for specified object in range
+	distance starting from 0.. - it's adjacent block
+]]
 function go.check_in_range_square(distance, object_coord)
-	local cur = go.get_tile_pos()	
+	local cur = go.get_tile_pos()
 	local obj = go.get_tile_pos(object_coord)
 	--dbg.log(cur)
 	--dbg.log(obj)
@@ -20,6 +23,14 @@ function go.check_in_range_square(distance, object_coord)
 	end
 end
 
+--[[
+	check for SOME object in range 0 in direction
+]]
+function go.check_direction_close(direction)
+	local cur = go.get_tile_pos()
+	pprint(go.get('/level#map', 'obj_pos'))
+end
+
 function go.get_range_square(object_coord)
 	local cur = go.get_position()
 	return math.abs(cur.x - object_coord_x), math.abs(cur.y - object_coord_y)
@@ -28,6 +39,11 @@ end
 
 function go.get_tile_pos(object_coord)
 	local pos = object_coord or go.get_position()
+	return go.convert2tile(pos)
+end
+
+function go.get_tile_pos_obj(object)
+	local pos = go.get_position(object)
 	return go.convert2tile(pos)
 end
 

@@ -1,6 +1,7 @@
 local range = require("utils.range")
 local dbg = require("utils.dbg")
 local inspect = require("utils.inspect")
+local tools = require("utils.tools")
 
 local moves = {
     move_left = { x = -1, y = 0 },
@@ -13,8 +14,9 @@ go.property('health', 10)
 go.property('is_turn', true)
 
 function init(self)
-    --self.health = 123
-	send_obj_pos()
+    self.enemies = {}
+    
+	--send_obj_pos()
     msg.post(".", "acquire_input_focus")
 end
 
@@ -55,6 +57,14 @@ function on_message(self, message_id, message, sender)
         end
     end
     
+    if message_id == hash("remove_from_list") then
+        for key, char_id in ipairs(self.enemies) do
+        	if char_id == message.id then
+        		table.remove(self.enemies, key)
+			end
+		end
+    end
+    
     if message_id == hash('take_turn') then
     	self.is_turn = true
 	end
@@ -62,26 +72,23 @@ end
 
 function on_input(self, action_id, action)
 
-    local pass_map = build_pass_map(self)
+    local pass_map = build_pass_map()
 
     --dbg.log(pass_map)
     --print(inspect(pass_map))
     
 	local direction = get_direction(action_id)
-    --print(direction)
-    
-    --print(self.is_turn)
 
-    if action.pressed and self.is_turn then
+    if moves[direction] ~= nil and action.pressed and self.is_turn then
 		--print('player take turn')
 
-		local object_at_direction = get_object_at_direction(direction)
+		local object_at_direction = get_object_at_direction(self, direction)
 		
 		--pprint(object_at_direction)
 
 		if (object_at_direction.type == 'enemy') then
-			--print('damage from player')
-			--msg.post(object_at_direction.receiver, 'damage', {damage = 2})
+			--print(object_at_direction.id)
+			msg.post(object_at_direction.id, 'damage', {damage = 2})
 		else
 			if passable(direction) then
 				local pos = go.get_position()
@@ -90,12 +97,21 @@ function on_input(self, action_id, action)
 				go.set_position(pos)
 			end
 		end
-    end
+	end
 
+	if action_id == hash('create_enemy') and action.pressed then
+		local rnd_x = math.random(2,5) * 16 + 8
+		local rnd_y = math.random(2,5) * 16 + 8
+		local enemy_id = factory.create('/enemies#factory', vmath.vector3(rnd_x, rnd_y, 0))
+		--table.insert(battle_order, {id = enemy_id, name = 'enemy', order = false})
+		table.insert(self.enemies, enemy_id)
+		msg.post('/level#battle_order', 'add', {id = enemy_id})
+		--self.battle_order[enemy_id] = {name = 'enemy', order = false}
+	end
+	
     if action.pressed then
     	self.is_turn = false
     	--print('player sending turn to map')
-        --msg.post('level#map', 'take_turn')
         next_turn()
     end
     --local t = tilemap.get_tile('level#tilemap', 'walls', self.player_x, self.player_y)
@@ -114,13 +130,34 @@ end
 
 --todo: отделить объекты от тайлов, проверять отдельно, тайлмеп есть - надо сделать карту объектов
 
-function get_object_at_direction(direction)
+function get_object_at_direction(self, direction)
 	--pprint(direction)
-	if go.check_in_range_square(0, go.get_position()) then
-		return {type = 'enemy', receiver = 'enemy'}
-	else
-		return {type = 'tile', receiver = 'map'}
+	--pprint(go.check_in_range_square(0, go.get_position()))
+	
+	--for 
+	--go.check_direction_close(direction)
+	
+	local cur = go.get_tile_pos()
+	--pprint(self.enemies)
+	--pprint(moves)
+	local test_move_x = cur.x + moves[direction].x
+	local test_move_y = cur.y + moves[direction].y
+	
+	for key, char in pairs(self.enemies) do
+		local enemy_pos = go.get_tile_pos_obj(char)
+		if (enemy_pos.x == test_move_x and enemy_pos.y == test_move_y) then
+			return {type = 'enemy', id = char}
+		end
 	end
+	
+	return {type = 'something'}
+	
+--	if go.check_in_range_square(0, go.get_position()) then
+--		return {type = 'enemy', id = }
+--	else
+--		return {type = 'tile', receiver = 'map'}
+--	end
+
 end
 
 function passable(direction)

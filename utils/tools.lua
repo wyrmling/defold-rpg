@@ -13,3 +13,13 @@ function deepcopy(orig)
     end
     return copy
 end
+
+function in_array(tab, val)
+    for index, value in ipairs(tab) do
+        if value == val then
+            return true
+        end
+    end
+
+    return false
+end

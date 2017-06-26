@@ -2,29 +2,35 @@ local range = require("utils.range")
 local dbg = require("utils.dbg")
 --require("utils.debug")
 
-go.property("health", 5)
+go.property("health", 2)
 go.property("hostile", true)
 
 function init(self)
 	-- добавить в карту объектов	
-	send_obj_pos()
+	--send_obj_pos()
 end
 
 function final(self)
-	-- Add finalization code here
-	-- Remove this function if not needed
+	msg.post('/level#battle_order', 'remove', {id = go.get_id()})
+	msg.post('/player#main', 'remove_from_list', {id = go.get_id()})
+	print('enemy was deleted')
 end
 
 function update(self, dt)
 	--/main/player.script
-	--msg.post("default:/player#player", "damage", {damage = 1})
-	--msg.post("player#player", "damage", {damage = 1})
+	--msg.post("default:/player#main", "damage", {damage = 1})
+	--msg.post("player#main", "damage", {damage = 1})
 end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash('take_turn') then
 		
 		--scroll_msg('turn taken')
+		
+		--local msg_label = factory.create('#msg_label_factory', nil, nil, {temp = false})
+		--local msg_label = factory.create('#msg_label_factory', nil, nil, {temp = true})
+		--msg.post(msg_label, 'scrolling_line', {text = 'test'})
+		--print(msg_label)
 		
 		--msg.post('#msg_label_factory', 'new_line', {'turn taken'})
 		
@@ -34,12 +40,19 @@ function on_message(self, message_id, message, sender)
 		if go.check_in_range_square(0, go.get_position('/player')) and self.hostile then
 			print('player close')
 			--dbg.log(go.get_position('/player'))
-			--msg.post(hash('/player#player'), 'damage', {damage = 1})
+			--msg.post(hash('/player#main'), 'damage', {damage = 1})
 			--attack_player()
 		end
 		
 		next_turn()
 	end
+	
+	if message_id == hash("damage") then
+        self.health = self.health - message.damage
+        if self.health <= 0 then
+            go.delete()
+        end
+    end
 	-- Add message-handling code here
 	-- Remove this function if not needed
 end
@@ -53,7 +66,3 @@ function on_reload(self)
 	-- Add reload-handling code here
 	-- Remove this function if not needed
 end
-
-
-
-
