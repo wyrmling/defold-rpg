@@ -1,7 +1,7 @@
 go.property('temp', false)
 
 function init(self)
-	self.time = 0
+	--self.time = 0
 end
 
 function final(self)
@@ -9,14 +9,14 @@ end
 
 function update(self, dt)
 	--go.set("#label", "outline.w", 0)
-	if self.temp then
-		local label_pos = go.get_position('#label')
-		self.time = self.time + dt
-		go.set_position(vmath.vector3(0, label_pos.y+1, 0), '#label')
-		if self.time > 0.5 then
-			go.delete()
-		end
-	end
+--	if self.temp then
+--		local label_pos = go.get_position('#label')
+--		self.time = self.time + dt
+--		go.set_position(vmath.vector3(0, label_pos.y+1, 0), '#label')
+--		if self.time > 0.5 then
+--			go.delete()
+--		end
+--	end
 end
 
 function on_message(self, message_id, message, sender)
@@ -25,6 +25,10 @@ function on_message(self, message_id, message, sender)
 		label.set_text('#label', message.text)
 		go.set('#label', 'color', message.color)
 		--go.property('color',message.color)
+		if self.temp then
+			local label_pos = go.get_position('#label')
+			go.animate(go.get_id(), 'position.y', go.PLAYBACK_ONCE_FORWARD, label_pos.y + 30, go.EASING_LINEAR, 1.5, 0, scroll_done)
+		end
 	end
 	if message_id == hash('test') then
 		print('таки да')
@@ -35,4 +39,10 @@ function on_input(self, action_id, action)
 end
 
 function on_reload(self)
+end
+
+function scroll_done(self, url, property)
+	go.delete()
+	--print(url)
+	--go.delete(url)
 end

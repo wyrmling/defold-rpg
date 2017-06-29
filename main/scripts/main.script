@@ -3,6 +3,7 @@ local dbg = require("utils.dbg")
 local inspect = require("utils.inspect")
 local tools = require("utils.tools")
 local dd = require("main.scripts.dd5.dd5")
+gop = require("utils.gop")
 
 local moves = {
     move_left = { x = -1, y = 0 },
@@ -27,12 +28,10 @@ go.property('level', 1)
 go.property('hp', 10)
 go.property('ac', 0)
 
+go.property('name', hash('player'))
+
 function init(self)
 	self.class = 'fighter'
-	
-	
-	
-	
 	
     self.enemies = {}
     
@@ -110,8 +109,15 @@ function on_input(self, action_id, action)
 		local object_at_direction = get_object_at_direction(self, direction)
 		
 		if (object_at_direction.type == 'enemy') then
-			msg.post(object_at_direction.id, 'damage', {damage = dd.roll('1d8') + dd.get_mod(self.str)})
-			msg.post('/sound#hit', 'play_sound', {gain = 0.1})
+			local attack_result = dd.attack_action(msg.url(), msg.url(object_at_direction.id))
+			if attack_result.res == 'hit' then
+				msg.post(object_at_direction.id, 'damage', {damage = attack_result.log.damage})
+				msg.post('/sound#hit', 'play_sound', {gain = 0.2})
+				msg.post('/gui#gui', 'add_log', {text = 'hit', log = attack_result.log})
+			else
+				msg.post('/sound#miss', 'play_sound', {gain = 0.5})
+				msg.post('/gui#gui', 'add_log', {text = 'miss', log = attack_result.log})
+			end
 		else
 			if passable(direction) then
 				local pos = go.get_position()
@@ -120,6 +126,10 @@ function on_input(self, action_id, action)
 				go.set_position(pos)
 			end
 		end
+	end
+
+	if action_id == hash('rest') and action.pressed then
+		self.hp = self.hp + dd.roll_hit_die(self)
 	end
 
 	if action_id == hash('create_enemy') and action.pressed then

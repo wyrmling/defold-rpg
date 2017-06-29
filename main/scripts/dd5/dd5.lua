@@ -92,4 +92,25 @@ function D.get_max_hit_die(char)
 	return dice
 end
 
+function D.attack_action(char, target)
+	--pprint(gop.get(char,'str'))
+	local attack_roll = D.roll('1d20') + D.get_mod(gop.get(char,'str'))
+	local target_ac = D.get_char_ac(target)
+	--print(attack_roll, target_ac)
+	local res
+	local damage_roll
+	if attack_roll >= target_ac then
+		res = 'hit'
+		damage_roll = D.roll('1d8') + D.get_mod(gop.get(char,'str'))
+	else
+		res = 'miss'
+	end
+	print(gop.get(char,'name')..'>'..gop.get(target,'name'), res, damage_roll)
+	return {res = res, log = {attack = attack_roll, ac = target_ac, damage = damage_roll}}
+end
+
+function D.get_char_ac(char)
+	return gop.get(char,'dex') + D.get_mod(gop.get(char,'dex'))
+end
+
 return D

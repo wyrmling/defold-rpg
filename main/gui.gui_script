@@ -1,6 +1,6 @@
 function init(self)
-	-- Add initialization code here
-	-- Remove this function if not needed
+	self.log = {}
+--	msg.post(".", "acquire_input_focus")
 end
 
 function final(self)
@@ -14,16 +14,49 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Remove this function if not needed
+	if message_id == hash('add_log') then
+		--pprint(message)
+		
+		local log = gui.get_node('log')
+		--local parent_message = gui.new_text_node(vmath.vector3(0,0,0.8), message.text)
+		--gui.set_parent(log, parent_message)
+		--gui.set_parent(parent_message, log)
+		--gui.animate(log, "position.y", gui.get_position(log).y + 10, gui.EASING_LINEAR, 2.0, 0, nil, gui.PLAYBACK_ONCE_FORWARD)
+		--gui.animate(parent_message, "position.y", gui.get_position(parent_message).y + 10, gui.EASING_LINEAR, 2.0, 0, nil, gui.PLAYBACK_ONCE_FORWARD)
+		
+		
+		
+		--local cloned_log = gui.clone(log)
+		
+		--go.animate(cloned_log, 'position.y', go.PLAYBACK_ONCE_FORWARD, gui.get_position(cloned_log).y + 30, go.EASING_LINEAR, 1.5)
+		--gui.animate(cloned_log, "position.y", gui.get_position(cloned_log).y + 30, gui.EASING_LINEAR, 2.0, 0, nil, gui.PLAYBACK_ONCE_FORWARD)
+		
+		local text_block = gui.get_node('text1')
+		local log_text = gui.get_text(text_block)
+		gui.set_text(text_block, log_text .. '\n' .. message.text .. '(' .. tostring(message.log.damage) .. ')')
+		--gui.set_color(cloned_log, vmath.vector4(1,1,1,1))
+		--fadeup(log)
+		--fadedown(log)
+	end
 end
 
 function on_input(self, action_id, action)
-	-- Add input-handling code here
-	-- Remove this function if not needed
+--	if action.pressed then
+--		local log = gui.get_node('text1')
+--		gui.set_text(log,text)
+--		pprint(log.text)
+--	end
 end
 
 function on_reload(self)
 	-- Add input-handling code here
 	-- Remove this function if not needed
+end
+
+function fadeup(self, node)
+   gui.animate(node, "color.w", 1.0, gui.EASING_LINEAR, 0.3, 0, fadedown, gui.PLAYBACK_ONCE_FORWARD)
+end
+
+function fadedown(node)
+   gui.animate(node, "color.w", 0.0, gui.EASING_LINEAR, 2.0, 0, nil, gui.PLAYBACK_ONCE_FORWARD)
 end

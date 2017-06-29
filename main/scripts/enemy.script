@@ -1,48 +1,53 @@
 local range = require("utils.range")
 local dbg = require("utils.dbg")
 local dd = require("main.scripts.dd5.dd5")
---require("utils.debug")
+local gop = require("utils.gop")
 
 go.property('hostile', true)
 
-go.property('str', 0)
-go.property('dex', 0)
-go.property('con', 0)
-go.property('int', 0)
-go.property('wis', 0)
-go.property('cha', 0)
+go.property('str', 13)
+go.property('dex', 12)
+go.property('con', 12)
+go.property('int', 10)
+go.property('wis', 10)
+go.property('cha', 9)
 
 --go.property('class', hash('fighter'))
 
-go.property('level', 1)
+go.property('level', 2)
 
-go.property('hp', 0)
-go.property('ac', 0)
+go.property('hp', 1)
+go.property('ac', 18)
+
+go.property('challenge', 100)
+
+go.property('name', hash('Hobgoblin'))
 
 
 function init(self)
-	self.class = 'mage'
+	self.class = ''
+	self.race = 'Hobgoblin'
 	
-	self.str = dd.roll_create()
-	self.dex = dd.roll_create()
-	self.con = dd.roll_create()
-	self.int = dd.roll_create()
-	self.wis = dd.roll_create()
-	self.cha = dd.roll_create()
+	--self.str = dd.roll_create()
+	--self.dex = dd.roll_create()
+	--self.con = dd.roll_create()
+	--self.int = dd.roll_create()
+	--self.wis = dd.roll_create()
+	--self.cha = dd.roll_create()
 	
-	self.hp = dd.get_max_hit_die(self) + dd.get_mod(self.con)
+	self.hp = dd.roll('2d8+2')
 end
 
 function final(self)
 	msg.post('/level#battle_order', 'remove', {id = go.get_id()})
-	msg.post('/player#main', 'remove_from_list', {id = go.get_id()})
+	msg.post('/player#script', 'remove_from_list', {id = go.get_id()})
 	print('enemy was deleted')
 end
 
 function update(self, dt)
 	--/main/player.script
-	--msg.post("default:/player#main", "damage", {damage = 1})
-	--msg.post("player#main", "damage", {damage = 1})
+	--msg.post("default:/player#script", "damage", {damage = 1})
+	--msg.post("player#script", "damage", {damage = 1})
 	
     label.set_text("#label_hp", self.hp)
     local red = vmath.vector4(1, 0, 0, 1.0)
@@ -65,9 +70,9 @@ function on_message(self, message_id, message, sender)
 		--label.set_text(msg_label, 'turn taken')
 		
 		if go.check_in_range_square(0, go.get_position('/player')) and self.hostile then
-			print('player close')
+			--print('player close')
 			--dbg.log(go.get_position('/player'))
-			msg.post('/player#main', 'damage', {damage = 1})
+			msg.post('/player#script', 'damage', {damage = 1})
 			--attack_player()
 		end
 		

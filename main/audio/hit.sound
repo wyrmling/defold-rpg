@@ -1,0 +1,4 @@
+sound: "/main/audio/destruction_Metal_Small_Impact_Small_Impact_05.wav"
+looping: 0
+group: "sfx"
+gain: 1.0

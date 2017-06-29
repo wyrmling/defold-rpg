@@ -1,13 +1,13 @@
 go.property('turn', 0)
-go.property('battle_order_active', msg.url('/player#main'))
---go.property('battle_order_active', hash('/player#main'))
+go.property('battle_order_active', msg.url('/player#script'))
+--go.property('battle_order_active', hash('/player#script'))
 
 local obj_pos = {}
 local battle_order = {}
 
 function init(self)
 	--init battle order
-	table.insert(battle_order, {id = msg.url('/player#main'), name = 'player', order = true})
+	table.insert(battle_order, {id = msg.url('/player#script'), name = 'player', order = true})
 	
 --	msg.post(".", "acquire_input_focus")
 end
@@ -68,22 +68,21 @@ function on_message(self, message_id, message, sender)
         			break
         		end
         	end
-        	--print(hash('/player#main'))
+        	--print(hash('/player#script'))
         	--print(self.battle_order_active)
         	--self.battle_order_active = battle_order[2].id
-        	--print(go.get('/player#main','health'))
+        	--print(go.get('/player#script','health'))
         	
         end
         
         --pprint(battle_order)
         --print(self.battle_order_active)
 		
-        --pprint(hash('/player#main'))
+        --pprint(hash('/player#script'))
         --print(go.get(self.battle_order_active,'health'))
-        --print(go.get(msg.url('player#main'),'health'))
-        
-        --print(go.get('/player#main','health'))
-        --pprint(go.get(hash('/player#main'),'health'))
+        --print(go.get(msg.url('player#script'),'health'))
+        --print(go.get('/player#script','health'))
+        --pprint(go.get(hash('/player#script'),'health'))
         
 		--scroll_msg('turn sent', self.battle_order_active)
         
@@ -114,7 +113,7 @@ function get_battle_order()
 	return self.battle_order	
 end
 
-function scroll_msg(text_message, url)
+--function scroll_msg(text_message, url)
 	--print(url, go.get_id(), msg.url())
 	--print(text_message .. ' by ' .. url)
 	--pprint(url)
@@ -124,7 +123,7 @@ function scroll_msg(text_message, url)
 	--local msg_label = factory.create('#msg_label_factory', nil, nil, {temp = true})
 	--print(msg_label)
 	--msg.post(msg_label, 'scrolling_line', {text = text_message})
-end
+--end
 
 --function send_obj_pos()
 --	local pos = go.get_position()
@@ -144,6 +143,6 @@ function scroll_msg(text_message)
 	--print(msg.url('#msg_label_factory'), msg.url())
 	--print(go.get_id('#msg_label_factory'))
 	local msg_label = factory.create('#msg_label_factory', nil, nil, {temp = true})
-	--print(msg_label)
 	msg.post(msg_label, 'scrolling_line', {text = text_message, color = vmath.vector4(math.random(), math.random(), math.random(), 1)})
 end
+
