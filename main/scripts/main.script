@@ -119,7 +119,7 @@ function on_input(self, action_id, action)
 				msg.post('/gui#gui', 'add_log', {text = 'miss', log = attack_result.log})
 			end
 		else
-			if passable(direction) then
+			if passable(direction, '/level#empty') then
 				local pos = go.get_position()
 				pos.x = pos.x + T_SIZE * moves[direction].x
 				pos.y = pos.y + T_SIZE * moves[direction].y
@@ -157,8 +157,9 @@ function on_input(self, action_id, action)
 end
 
 function on_reload(self)
-    -- Add reload-handling code here
-    -- Remove this function if not needed
+    local t = tilemap.get_tile('/level#empty', 'walls', 1, 1)
+    
+    pprint(t)
 end
 
 --todo: отделить объекты от тайлов, проверять отдельно, тайлмеп есть - надо сделать карту объектов
@@ -193,10 +194,11 @@ function get_object_at_direction(self, direction)
 
 end
 
-function passable(direction)
-    local pos = go.get_tile_pos()
+function passable(direction, map_name)
+    map_name = map_name or 'level#tilemap'
+	local pos = go.get_tile_pos()
 
-	if tilemap.get_tile('level#tilemap', 'walls', pos.x + moves[direction].x, pos.y + moves[direction].y) == 0 then
+	if tilemap.get_tile(map_name, 'walls', pos.x + moves[direction].x, pos.y + moves[direction].y) == 0 then
         return true
     else
         return false

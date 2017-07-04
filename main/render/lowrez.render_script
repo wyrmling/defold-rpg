@@ -13,7 +13,8 @@ function init(self)
     self.view = vmath.matrix4()
 end
 
-local RESOLUTION = 320
+--local RESOLUTION = 320
+local RESOLUTION = 1024
 
 function update(self)
     render.set_depth_mask(true)
@@ -38,15 +39,26 @@ function update(self)
     -- default set_projection
     --render.set_projection(vmath.matrix4_orthographic(0, RESOLUTION, 0, RESOLUTION, -1, 1))
 
-    -- camera centered
+    -- camera centered projection
     render.set_projection(vmath.matrix4_orthographic(-RESOLUTION / 2, RESOLUTION / 2, -RESOLUTION / 2, RESOLUTION / 2, -1, 1))
 
     render.draw(self.tile_pred)
     render.draw(self.particle_pred)
     render.draw_debug3d()
 
+	-- Render the GUI last
     render.set_view(vmath.matrix4())
     render.set_projection(vmath.matrix4_orthographic(0, RESOLUTION, 0, RESOLUTION, -1, 1))
+    --local size = math.min(render.get_window_width(), render.get_window_height())
+    --print(w > h and offset or 0)
+    --print(w < h and offset or 0)
+    --render.set_projection(vmath.matrix4_orthographic(min_size, w > h and offset or 0, min_size, w < h and offset or 0, -1, 1))
+	--render.set_projection(vmath.matrix4_orthographic(w > h and offset or 0, min_size, w < h and offset or 0, min_size, -1, 1))
+	--render.set_projection(vmath.matrix4_orthographic(w > h and offset or 0, w < h and offset or 0, min_size, min_size, -1, 1))
+	--render.set_projection(vmath.matrix4_orthographic(-RESOLUTION / 2, RESOLUTION / 2, -RESOLUTION / 2, RESOLUTION / 2, -1, 1))
+    --render.set_projection(vmath.matrix4_orthographic(0, size, 0, size, -1, 1))
+    --render.set_projection(vmath.matrix4_orthographic(0, render.get_window_width(), 0, render.get_window_height(), -1, 1))
+    --render.set_projection(vmath.matrix4_orthographic(0, render.get_width(), 0, render.get_height(), -1, 1))
 
     render.enable_state(render.STATE_STENCIL_TEST)
     render.draw(self.gui_pred)

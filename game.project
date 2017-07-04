@@ -11,8 +11,8 @@ render = /main/render/main.renderc
 game_binding = /input/game.input_bindingc
 
 [display]
-width = 640
-height = 640
+width = 800
+height = 450
 fullscreen = 0
 
 [script]
